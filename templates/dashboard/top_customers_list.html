@@ -30,9 +30,7 @@
             <td>{{ customer.first_name }}</td>
             <td>{{ customer.company }}</td>
             <td>{{ customer.mobile_phone }}</td>
-            <td>
-              <span class="badge bg-label-primary me-1">{{ customer.order_count }}</span>
-            </td>
+            <td>{{ customer.order_count }}</td>
           </tr>
           {% empty %}
           <tr>
