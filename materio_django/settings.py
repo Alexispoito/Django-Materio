@@ -75,10 +75,10 @@ WSGI_APPLICATION = 'materio_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'northwind',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'NAME': 'alexispo$northwind',
+        'USER': 'alexispo',
+        'PASSWORD': 'Root12345',
+        'HOST': 'alexispo.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
 }
