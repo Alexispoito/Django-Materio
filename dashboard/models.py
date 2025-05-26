@@ -162,6 +162,8 @@ class OrdersStatus(models.Model):
         managed = False
         db_table = 'orders_status'
 
+    def __str__(self):
+        return self.status_name
 
 class OrdersTaxStatus(models.Model):
     id = models.IntegerField(primary_key=True)

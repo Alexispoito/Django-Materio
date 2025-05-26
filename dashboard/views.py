@@ -24,9 +24,9 @@ def dashboard(request):
     weekly_profit = total_earnings * Decimal('0.3')  # Example value (30% of total)
 
     product_icons = [
-        static('img/products/marmalade.jpg'),
-        static('img/products/dried_apples.jpg'),
-        static('img/products/coffee.jpeg'),
+        static('img/products/marmalade.png'),
+        static('img/products/dried_apples.png'),
+        static('img/products/coffee.png'),
     ]
 
     top_clients = []

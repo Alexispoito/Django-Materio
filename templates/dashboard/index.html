@@ -1166,8 +1166,10 @@
                         <li class="d-flex mb-4 align-items-center pb-2">
                           <div class="flex-shrink-0 me-4">
                             <div class="avatar">
-                              <div class="avatar-initial bg-label-{{ colors.forloop.counter0 }} rounded-circle shadow">
-                                {{ employee.first_name|first }}{{ employee.last_name|first }}
+                              <div class="avatar avatar-sm me-4">
+                                {% with avatar_num=forloop.counter|stringformat:"s" %}
+                                  <img src="{% static 'img/avatars/'|add:avatar_num|add:'.png' %}" alt="Avatar" class="rounded-circle" />
+                                {% endwith %}
                               </div>
                             </div>
                           </div>
