@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'dashboard',  # Your dashboard app
+    'dashboard',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -75,10 +76,10 @@ WSGI_APPLICATION = 'materio_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'alexispo$northwind',
-        'USER': 'alexispo',
-        'PASSWORD': 'Root12345',
-        'HOST': 'alexispo.mysql.pythonanywhere-services.com',
+        'NAME': 'northwind',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

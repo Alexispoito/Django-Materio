@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!doctype html>
 
 <html
@@ -745,7 +746,7 @@
                         </h6>
                         <p class="mb-2">Top customers this month</p>
                       {% endif %}
-                      <h4 class="text-primary mb-0">$42.8k</h4>
+                      <h4 class="text-primary mb-0">₱420,000.8k</h4>
                       <p class="mb-2">78% of target 🚀</p>
 
                       <a href="{% url 'top_customers_list' %}" class="btn btn-sm btn-outline-primary">View All Customers</a>
@@ -761,7 +762,7 @@
 
                 <!--/ Congratulations card -->
 
-
+                
                 <!-- Transactions -->
                 <div class="col-lg-8">
                   <div class="card h-100">
@@ -849,112 +850,384 @@
                 </div>
                 <!--/ Transactions -->
 
-                            <!-- Top Products -->
-                            <div class="col-lg-8">
-                              <div class="card h-100">
-                                <div class="card-header d-flex align-items-center justify-content-between">
-                                  <h5 class="card-title m-0 me-2">Top Products</h5>
-                                </div>
-                                <div class="card-body">
-                                  <div class="table-responsive">
-                                    <table class="table table-sm">
-                                      <thead>
-                                        <tr>
-                                          <th>Product Name</th>
-                                          <th>Product Code</th>
-                                          <th>Quantity Sold</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {% for product in top_products %}
-                                        <tr>
-                                          <td>{{ product.product_name }}</td>
-                                          <td>{{ product.product_code }}</td>
-                                          <td>{{ product.quantity_sold|default:0 }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div>
-                              </div>
+
+
+                 <!-- Top Product Bar Chart -->
+                <div class="col-xl-4 col-md-6">
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="d-flex justify-content-between">
+                        <h5 class="mb-1">Top Products (Monthly Sales)</h5>
+                        <div class="dropdown">
+                          <button class="btn text-body-secondary p-0" type="button" id="topProductsDropdown"
+                                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-base ri ri-more-2-line icon-24px"></i>
+                          </button>
+                          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="topProductsDropdown">
+                            <a class="dropdown-item" href="#">Refresh</a>
+                            <a class="dropdown-item" href="#">Share</a>
+                            <a class="dropdown-item" href="#">Update</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card-body pt-lg-2">
+                      <div style="height: 250px;">
+                        <canvas id="topProductsBarChart"></canvas>
+                      </div>
+
+                      <div class="d-grid mt-3 mt-md-4">
+                        <button class="btn btn-secondary" type="button">View Details</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script>
+                fetch("/top-products-bar-data/")
+                  .then(response => response.json())
+                  .then(data => {
+                    const labels = data.labels;
+                    const quantities = data.data;
+
+                    // Array of colors (you can customize more or add more colors)
+                    const backgroundColors = [
+                      'rgba(255, 99, 132, 0.7)',
+                      'rgba(54, 162, 235, 0.7)',
+                      'rgba(255, 206, 86, 0.7)',
+                      'rgba(75, 192, 192, 0.7)',
+                      'rgba(153, 102, 255, 0.7)',
+                      'rgba(255, 159, 64, 0.7)',
+                      'rgba(199, 199, 199, 0.7)',
+                      'rgba(83, 102, 255, 0.7)',
+                      'rgba(255, 99, 71, 0.7)',
+                      'rgba(60, 179, 113, 0.7)'
+                    ];
+
+                    const borderColors = backgroundColors.map(color => color.replace('0.7', '1'));
+
+                    const ctx = document.getElementById("topProductsBarChart").getContext("2d");
+
+                    new Chart(ctx, {
+                      type: "bar",
+                      data: {
+                        labels: labels,
+                        datasets: [{
+                          label: "Top Sold",  
+                          data: quantities,
+                          backgroundColor: backgroundColors.slice(0, labels.length),
+                          borderColor: borderColors.slice(0, labels.length),
+                          borderWidth: 1
+                        }]
+                      },
+                      options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            ticks: {
+                              stepSize: 1
+                            }
+                          }
+                        },
+                        plugins: {
+                          legend: {
+                            display: true,
+                            position: "bottom",
+                            labels: {
+                              color: '#4e5154',
+                              font: {
+                                size: 12
+                              }
+                            }
+                          }
+                        }
+                      }
+                    });
+                  })
+                  .catch(error => console.error("Error:", error));
+                </script>
+                <!--/ Top Product Bar Chart -->
+
+                <!-- Total Earnings - Dynamic from DB -->
+                <div class="col-xl-4 col-md-6">
+                  <div class="card">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="card-title m-0 me-2">Total Earning</h5>
+                      <div class="dropdown">
+                        <button class="btn text-body-secondary p-0" type="button" id="totalEarnings"
+                          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="icon-base ri ri-more-2-line icon-24px"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalEarnings">
+                          <a class="dropdown-item" href="#">Last 28 Days</a>
+                          <a class="dropdown-item" href="#">Last Month</a>
+                          <a class="dropdown-item" href="#">Last Year</a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card-body pt-lg-8">
+                      <div class="mb-5 mb-lg-12">
+                        <div class="d-flex align-items-center">
+                          <h3 class="mb-0">₱{{ total_earnings|floatformat:2|intcomma }}</h3>
+                          <span class="text-success ms-2">
+                            <i class="icon-base ri ri-arrow-up-s-line icon-sm"></i>
+                            <span>{{ growth_percent }}%</span>
+                          </span>
+                        </div>
+                        <p class="mb-0">Compared to ₱{{ last_year_earnings|floatformat:2|intcomma }} last year</p>
+                      </div>
+
+                      <ul class="p-0 m-0">
+                        {% for item in top_clients %}
+                        <li class="d-flex mb-6">
+                          <div class="avatar flex-shrink-0 bg-lightest rounded me-3">
+                            <img src="{{ item.icon_url }}" alt="{{ item.name }}" />
+                          </div>
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="me-2">
+                              <h6 class="mb-0">{{ item.name }}</h6>
+                              <p class="mb-0">{{ item.stack }}</p>
                             </div>
-
-                            
-                            <!-- Employee Performance -->
-                            <div class="col-lg-4">
-                              <div class="card h-100">
-                                <div class="card-header d-flex align-items-center justify-content-between">
-                                  <h5 class="card-title m-0 me-2">Top Employees</h5>
-                                </div>
-                                <div class="card-body">
-                                  <ul class="p-0 m-0">
-                                    {% for employee in employee_orders %}
-                                    <li class="d-flex mb-4 align-items-center pb-2">
-                                      <div class="flex-shrink-0 me-4">
-                                        <div class="avatar">
-                                          <div class="avatar-initial bg-label-{{ colors.forloop.counter0 }} rounded-circle shadow">
-                                            {{ employee.first_name|first }}{{ employee.last_name|first }}
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                        <div class="me-2">
-                                          <h6 class="mb-0">{{ employee.first_name }} {{ employee.last_name }}</h6>
-                                          <p class="mb-0">{{ employee.job_title }}</p> <!-- or any other relevant info -->
-                                        </div>
-                                        <div class="text-end">
-                                          <h6 class="mb-0">{{ employee.handled_orders }}</h6>
-                                          <small class="text-body-secondary">Orders handled</small>
-                                        </div>
-                                      </div>
-                                    </li>
-                                    {% endfor %}
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-
-
-                        <!-- Recent Orders -->
-                        <div class="row mt-4">
-                          <div class="col-12">
-                            <div class="card">
-                              <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="card-title m-0 me-2">Recent Orders</h5>
-                                <!-- Remove or update this link if no rental_list view -->
-                                <!-- <a href="#" class="btn btn-sm btn-outline-primary">View All</a> -->
-                              </div>
-                              <div class="card-body">
-                                <div class="table-responsive">
-                                  <table class="table table-sm">
-                                    <thead>
-                                      <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Employee</th>
-                                        <th>Order Date</th>
-                                        <th>Status</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {% for order in recent_orders %}
-                                      <tr>
-                                        <td>{{ order.id }}</td>
-                                        <td>{{ order.customer.first_name }} {{ order.customer.last_name }}</td>
-                                        <td>{{ order.employee.first_name }} {{ order.employee.last_name }}</td>
-                                        <td>{{ order.order_date|date:"M d, Y" }}</td>
-                                        <td>{{ order.status|default:"Pending" }}</td>
-                                      </tr>
-                                      {% endfor %}
-                                    </tbody>
-                                  </table>
-                                </div>
+                            <div>
+                              <h6 class="mb-2">₱{{ item.total_sales|floatformat:2|intcomma }}</h6>
+                              <div class="progress bg-label-primary" style="height: 4px">
+                                <div class="progress-bar bg-primary" style="width: {{ item.percent }}%" role="progressbar"
+                                  aria-valuenow="{{ item.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
                               </div>
                             </div>
                           </div>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- /Total Earnings - Dynamic from DB -->
+
+                <!-- Four Cards -->
+                <div class="col-xl-4 col-md-6">
+                  <div class="row gy-6">
+                    <!-- Total Profit line chart -->
+                    <div class="col-sm-6">
+                      <div class="card h-100">
+                        <div class="card-header pb-0">
+                          {% load humanize %}
+                          <h4 class="mb-0">₱{{ total_earnings|floatformat:2|intcomma }}</h4>
                         </div>
-                    <!-- / Content -->
+                        <div class="card-body">
+                          <div id="totalProfitLineChart" class="mb-3"></div>
+                          <h6 class="text-center mb-0">Total Profit</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <!--/ Total Profit line chart -->
+
+                    <!-- Total Profit Weekly Project -->
+                    <div class="col-sm-6">
+                      <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                          <div class="avatar">
+                            <div class="avatar-initial bg-secondary rounded-circle shadow-xs">
+                              <i class="icon-base ri ri-pie-chart-2-line icon-24px"></i>
+                            </div>
+                          </div>
+                          <div class="dropdown">
+                            <button
+                              class="btn text-body-secondary p-0"
+                              type="button"
+                              id="totalProfitID"
+                              data-bs-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false">
+                              <i class="icon-base ri ri-more-2-line icon-24px"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="totalProfitID">
+                              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                              <a class="dropdown-item" href="javascript:void(0);">Share</a>
+                              <a class="dropdown-item" href="javascript:void(0);">Update</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          {% load humanize %}
+                          <h6 class="mb-1">Total Profit</h6>
+                          <div class="d-flex flex-wrap mb-1 align-items-center">
+                            <h4 class="mb-0 me-2">₱{{ weekly_profit|floatformat:2|intcomma }}</h4>
+                            <p class="text-success mb-0">+42%</p>
+                          </div>
+                          <small>Weekly Project</small>
+                        </div>
+                      </div>
+                    </div>
+                    <!--/ Total Profit Weekly Project -->
+
+                    <!-- New Yearly Project -->
+                    <div class="col-sm-6">
+                      <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                          <div class="avatar">
+                            <div class="avatar-initial bg-primary rounded-circle shadow-xs">
+                              <i class="icon-base ri ri-file-word-2-line icon-24px"></i>
+                            </div>
+                          </div>
+                          <div class="dropdown">
+                            <button
+                              class="btn text-body-secondary p-0"
+                              type="button"
+                              id="newProjectID"
+                              data-bs-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false">
+                              <i class="icon-base ri ri-more-2-line icon-24px"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="newProjectID">
+                              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                              <a class="dropdown-item" href="javascript:void(0);">Share</a>
+                              <a class="dropdown-item" href="javascript:void(0);">Update</a>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <h6 class="mb-1">New Project</h6>
+                          <div class="d-flex flex-wrap mb-1 align-items-center">
+                            <h4 class="mb-0 me-2">862</h4>
+                            <p class="text-danger mb-0">-18%</p>
+                          </div>
+                          <small>Yearly Project</small>
+                        </div>
+                      </div>
+                    </div>
+                    <!--/ New Yearly Project -->
+                    <!-- Sessions chart -->
+                    <div class="col-sm-6">
+                      <div class="card h-100">
+                        <div class="card-header pb-0">
+                          <h4 class="mb-0">2,856</h4>
+                        </div>
+                        <div class="card-body">
+                          <div id="sessionsColumnChart" class="mb-3"></div>
+                          <h6 class="text-center mb-0">Sessions</h6>
+                        </div>
+                      </div>
+                    </div>
+                    <!--/ Sessions chart -->
+                  </div>
+                </div>
+                <!--/ four cards -->
+                
+
+                <!-- Top Products -->
+                <div class="col-lg-8">
+                  <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="card-title m-0 me-2">Top Products</h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table class="table table-sm">
+                          <thead>
+                            <tr>
+                              <th>Product Name</th>
+                              <th>Product Code</th>
+                              <th>Quantity Sold</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for product in top_products %}
+                            <tr>
+                              <td>{{ product.product_name }}</td>
+                              <td>{{ product.product_code }}</td>
+                              <td>{{ product.quantity_sold|default:0 }}</td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                
+                <!-- Employee Performance -->
+                <div class="col-lg-4">
+                  <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="card-title m-0 me-2">Top Employees</h5>
+                    </div>
+                    <div class="card-body">
+                      <ul class="p-0 m-0">
+                        {% for employee in employee_orders %}
+                        <li class="d-flex mb-4 align-items-center pb-2">
+                          <div class="flex-shrink-0 me-4">
+                            <div class="avatar">
+                              <div class="avatar-initial bg-label-{{ colors.forloop.counter0 }} rounded-circle shadow">
+                                {{ employee.first_name|first }}{{ employee.last_name|first }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                            <div class="me-2">
+                              <h6 class="mb-0">{{ employee.first_name }} {{ employee.last_name }}</h6>
+                              <p class="mb-0">{{ employee.job_title }}</p> <!-- or any other relevant info -->
+                            </div>
+                            <div class="text-end">
+                              <h6 class="mb-0">{{ employee.handled_orders }}</h6>
+                              <small class="text-body-secondary">Orders handled</small>
+                            </div>
+                          </div>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+            <!-- Recent Orders -->
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">Recent Orders</h5>
+                    <!-- Remove or update this link if no rental_list view -->
+                    <!-- <a href="#" class="btn btn-sm btn-outline-primary">View All</a> -->
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-sm">
+                        <thead>
+                          <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Employee</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for order in recent_orders %}
+                          <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.customer.first_name }} {{ order.customer.last_name }}</td>
+                            <td>{{ order.employee.first_name }} {{ order.employee.last_name }}</td>
+                            <td>{{ order.order_date|date:"M d, Y" }}</td>
+                            <td>{{ order.status|default:"Pending" }}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <!-- / Content -->
 
                     <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
