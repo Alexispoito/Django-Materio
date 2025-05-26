@@ -23,6 +23,13 @@ def dashboard(request):
 
     weekly_profit = total_earnings * Decimal('0.3')  # Example value (30% of total)
 
+    # Yearly sales for 2006
+    sales_2006 = OrderDetails.objects.filter(
+        order__order_date__year=2006
+    ).aggregate(
+        total=Sum(F('quantity') * F('unit_price'), output_field=DecimalField())
+    )['total'] or Decimal('0.00')
+
     product_icons = [
         static('img/products/marmalade.png'),
         static('img/products/dried_apples.png'),
@@ -48,6 +55,7 @@ def dashboard(request):
         },
         'weekly_profit': weekly_profit,
         'total_earnings': total_earnings,
+        'sales_2006': sales_2006,
         'last_year_earnings': last_year_earnings,
         'growth_percent': growth_percent,
         'top_clients': top_clients,

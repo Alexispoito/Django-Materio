@@ -1067,7 +1067,7 @@
                     </div>
                     <!--/ Total Profit Weekly Project -->
 
-                    <!-- New Yearly Project -->
+                    <!-- Yearly Sales (Static: 2006 Only) -->
                     <div class="col-sm-6">
                       <div class="card h-100">
                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -1094,29 +1094,32 @@
                           </div>
                         </div>
                         <div class="card-body">
-                          <h6 class="mb-1">New Project</h6>
+                          {% load humanize %}
+                          <h6 class="mb-1">Total Sales</h6>
                           <div class="d-flex flex-wrap mb-1 align-items-center">
-                            <h4 class="mb-0 me-2">862</h4>
-                            <p class="text-danger mb-0">-18%</p>
+                            <h4 class="mb-0 me-2">₱{{ sales_2006|floatformat:2|intcomma }}</h4>
+                            <p class="text-muted mb-0">Data from 2006</p>
                           </div>
-                          <small>Yearly Project</small>
+                          <small>No comparison available</small>
                         </div>
                       </div>
                     </div>
-                    <!--/ New Yearly Project -->
-                    <!-- Sessions chart -->
-                    <div class="col-sm-6">
-                      <div class="card h-100">
-                        <div class="card-header pb-0">
-                          <h4 class="mb-0">2,856</h4>
-                        </div>
-                        <div class="card-body">
-                          <div id="sessionsColumnChart" class="mb-3"></div>
-                          <h6 class="text-center mb-0">Sessions</h6>
-                        </div>
+                    <!--/ Yearly Sales -->
+
+                   <!-- Yearly Sales from 2006 -->
+                  <div class="col-sm-6">
+                    <div class="card h-100">
+                      <div class="card-header pb-0">
+                        <h4 class="mb-0">₱{{ sales_2006|floatformat:2|intcomma }}</h4>
+                      </div>
+                      <div class="card-body">
+                        <div id="sessionsColumnChart" class="mb-3"></div>
+                        <h6 class="text-center mb-0">Yearly Sales (2006)</h6>
                       </div>
                     </div>
-                    <!--/ Sessions chart -->
+                  </div>
+                  <!--/ Yearly Sales from 2006 -->
+
                   </div>
                 </div>
                 <!--/ four cards -->
