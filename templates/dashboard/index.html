@@ -1123,6 +1123,140 @@
                   </div>
                 </div>
                 <!--/ four cards -->
+
+                <!-- Sales by Cities -->
+                <div class="col-xl-4 col-md-6">
+                  <div class="card h-100">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="card-title m-0 me-2">Sales by Cities</h5>
+                      <div class="dropdown">
+                        <button
+                          class="btn text-body-secondary p-0"
+                          type="button"
+                          id="saleStatus"
+                          data-bs-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false">
+                          <i class="icon-base ri ri-more-2-line icon-24px"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="saleStatus">
+                          <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
+                          <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                          <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      {% for city in sales_by_countries %}
+                        {% cycle 'primary' 'success' 'info' 'warning' 'danger' as color_cycle silent%}
+                        <div class="d-flex justify-content-between mb-4">
+                          <div class="d-flex align-items-center">
+                            <div class="avatar me-4">
+                              <span class="avatar-initial bg-label-{{ color_cycle }} rounded-circle">
+                                {{ city.code }}
+                              </span>
+                            </div>
+                            <div>
+                              <div class="d-flex align-items-center gap-1 mb-1">
+                                <h6 class="mb-0">₱{{ city.total_sales|floatformat:2 }}k</h6>
+                                {% if city.trend == 'up' %}
+                                  <i class="icon-base ri ri-arrow-up-s-line icon-24px text-success"></i>
+                                  <span class="text-success">{{ city.percent }}%</span>
+                                {% else %}
+                                  <i class="icon-base ri ri-arrow-down-s-line icon-24px text-danger"></i>
+                                  <span class="text-danger">{{ city.percent }}%</span>
+                                {% endif %}
+                              </div>
+                              <p class="mb-0">{{ city.city }}</p>
+                            </div>
+                          </div>
+                          <div class="text-end">
+                            <h6 class="mb-1">{{ city.sales_count }}k</h6>
+                            <small class="text-body-secondary">Sales</small>
+                          </div>
+                        </div>
+                      {% empty %}
+                        <p class="text-muted">No sales data available.</p>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <!--/ Sales by Cities -->
+
+
+                <!-- Quantity / Payment Types-->
+                <div class="col-xl-8">
+                  <div class="card-group">
+                    <!-- Quantity Sales by Top City -->
+                    <div class="card mb-0">
+                      <div class="card-body card-separator">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+                          <h5 class="m-0 me-2">Quantity Sales by Top City</h5>
+                          <a class="fw-medium" href="javascript:void(0);">View all</a>
+                        </div>
+                        <div class="deposit-content pt-2">
+                          <ul class="p-0 m-0">
+                            {% for city in top_city_sales %}
+                              {% cycle 'primary' 'success' 'warning' 'danger' 'info' 'secondary' as color_cycle silent%}
+                              <li class="d-flex mb-4 align-items-center pb-2">
+                                <div class="flex-shrink-0 me-4">
+                                  <span class="avatar-initial bg-label-{{ color_cycle }} rounded-circle"
+                                        style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    {{ city.name|slice:":2" }}
+                                  </span>
+                                </div>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                  <div class="me-2">
+                                    <h6 class="mb-0">{{ city.name }}</h6>
+                                    <p class="mb-0">City Sales</p>
+                                  </div>
+                                  <h6 class="text-primary mb-0">{{ city.total_quantity }} pcs</h6>
+                                </div>
+                              </li>
+                            {% empty %}
+                              <li class="text-muted">No sales data available.</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <!--/ Quantity Sales by Top City -->
+
+                    <!-- Payment Types -->
+                    <div class="card mb-0">
+                      <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+                          <h5 class="m-0 me-2">Payment Types</h5>
+                          <a class="fw-medium" href="javascript:void(0);">View all</a>
+                        </div>
+                        <div class="withdraw-content pt-2">
+                          <ul class="p-0 m-0">
+                            {% for pt in payment_types %}
+                              <li class="d-flex mb-4 align-items-center pb-2">
+                                <div class="flex-shrink-0 me-4">
+                                  <span class="avatar-initial bg-label-warning rounded-circle" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    {{ pt.name|slice:":2"|upper }}
+                                  </span>
+                                </div>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                  <div class="me-2">
+                                    <h6 class="mb-0">{{ pt.name }}</h6>
+                                    <p class="mb-0">Used in Orders</p>
+                                  </div>
+                                  <h6 class="text-danger mb-0">{{ pt.count }} uses</h6>
+                                </div>
+                              </li>
+                            {% empty %}
+                              <li class="text-muted">No payment type data found.</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <!--/ Payment Types -->
+                  </div>
+                </div>
+                <!-- Quantity / Payment Types-->
                 
 
                 <!-- Top Products -->
