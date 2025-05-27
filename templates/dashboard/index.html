@@ -789,25 +789,28 @@
                     </div>
                     <div class="card-body pt-lg-10">
                       <div class="row g-6">
+
+                        <!-- Total Customers -->
                         <div class="col-md-3 col-6">
                           <div class="d-flex align-items-center">
                             <div class="avatar">
-                              <div class="avatar-initial bg-primary rounded shadow-xs">
-                                <i class="icon-base ri ri-pie-chart-2-line icon-24px"></i>
+                              <div class="avatar-initial bg-primary rounded shadow-xs d-flex align-items-center justify-content-center">
+                                <img src="{% static 'img/icons/metrics/customers.png' %}" alt="customers" width="24" height="24">
                               </div>
                             </div>
                             <div class="ms-3">
-                          <p class="mb-0">Total Customers</p>
-                          <h5 class="mb-0">{{ metrics.total_customers }}</h5>
-                        </div>
-                        </div>
+                              <p class="mb-0">Total Customers</p>
+                              <h5 class="mb-0">{{ metrics.total_customers }}</h5>
+                            </div>
+                          </div>
                         </div>
 
+                        <!-- Total Orders -->
                         <div class="col-md-3 col-6">
                           <div class="d-flex align-items-center">
                             <div class="avatar">
-                              <div class="avatar-initial bg-success rounded shadow-xs">
-                                <i class="icon-base ri ri-shopping-cart-line icon-24px"></i>  <!-- icon for orders -->
+                              <div class="avatar-initial bg-success rounded shadow-xs d-flex align-items-center justify-content-center">
+                                <img src="{% static 'img/icons/metrics/orders.png' %}" alt="orders" width="24" height="24">
                               </div>
                             </div>
                             <div class="ms-3">
@@ -817,11 +820,12 @@
                           </div>
                         </div>
 
+                        <!-- Total Products -->
                         <div class="col-md-3 col-6">
                           <div class="d-flex align-items-center">
                             <div class="avatar">
-                              <div class="avatar-initial bg-warning rounded shadow-xs">
-                                <i class="icon-base ri ri-box-line icon-24px"></i>  <!-- icon for products -->
+                              <div class="avatar-initial bg-warning rounded shadow-xs d-flex align-items-center justify-content-center">
+                                <img src="{% static 'img/icons/metrics/products.png' %}" alt="products" width="24" height="24">
                               </div>
                             </div>
                             <div class="ms-3">
@@ -831,11 +835,12 @@
                           </div>
                         </div>
 
+                        <!-- Employees -->
                         <div class="col-md-3 col-6">
                           <div class="d-flex align-items-center">
                             <div class="avatar">
-                              <div class="avatar-initial bg-info rounded shadow-xs">
-                                <i class="icon-base ri ri-user-line icon-24px"></i> <!-- you can change or add another metric -->
+                              <div class="avatar-initial bg-info rounded shadow-xs d-flex align-items-center justify-content-center">
+                                <img src="{% static 'img/icons/metrics/employees.png' %}" alt="employees" width="24" height="24">
                               </div>
                             </div>
                             <div class="ms-3">
@@ -844,6 +849,7 @@
                             </div>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
