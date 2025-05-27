@@ -1038,11 +1038,13 @@
                     <div class="col-sm-6">
                       <div class="card h-100">
                         <div class="card-header d-flex align-items-center justify-content-between">
-                          <div class="avatar">
-                            <div class="avatar-initial bg-secondary rounded-circle shadow-xs">
-                              <i class="icon-base ri ri-pie-chart-2-line icon-24px"></i>
+                            <div class="avatar">
+                            <!-- Smaller blue background circle -->
+                              <div class="rounded-circle shadow-xs d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #97d375;">
+                                <!-- Independent small icon inside -->
+                                <img src="{% static 'img/icons/metrics/profit.png' %}" alt="profit-icon" style="width: 25px; height: 25px;">
+                              </div>
                             </div>
-                          </div>
                           <div class="dropdown">
                             <button
                               class="btn text-body-secondary p-0"
@@ -1078,8 +1080,9 @@
                       <div class="card h-100">
                         <div class="card-header d-flex align-items-center justify-content-between">
                           <div class="avatar">
-                            <div class="avatar-initial bg-primary rounded-circle shadow-xs">
-                              <i class="icon-base ri ri-file-word-2-line icon-24px"></i>
+                            <!-- Adjusted avatar with smaller icon and custom background -->
+                            <div class="rounded-circle shadow-xs d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background-color: #74aae4;">
+                              <img src="{% static 'img/icons/metrics/yearly-sales.png' %}" alt="yearly-sales-icon" style="width: 25px; height: 25px;">
                             </div>
                           </div>
                           <div class="dropdown">
