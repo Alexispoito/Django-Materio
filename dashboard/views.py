@@ -4,7 +4,7 @@ from django.db.models import Sum, Count, F, DecimalField
 from django.db.models.functions import ExtractMonth
 from datetime import datetime
 from decimal import Decimal
-from django.templatetags.static import static  # <-- For static file URLs
+from django.templatetags.static import static
 from django.db.models.functions import TruncMonth
 
 from .models import Customers, Orders, Products, Employees, OrderDetails
@@ -108,7 +108,7 @@ def dashboard(request):
         ).order_by('-order_count')[:2],
         'employee_orders': Employees.objects.annotate(
             handled_orders=Count('orders')
-        ).order_by('-handled_orders')[:5],
+        ).order_by('-handled_orders')[:7],
         'recent_orders': Orders.objects.select_related('customer', 'employee').order_by('-order_date')[:10],
         'colors': ['primary', 'success', 'warning', 'danger', 'info']
     }

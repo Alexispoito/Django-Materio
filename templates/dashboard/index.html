@@ -749,7 +749,7 @@
                       <h4 class="text-primary mb-0">₱420,000.8k</h4>
                       <p class="mb-2">78% of target 🚀</p>
 
-                      <a href="{% url 'top_customers_list' %}" class="btn btn-sm btn-outline-primary">View All Customers</a>
+                      <a href="javascript:;" class="btn btn-sm btn-primary">View All Customers</a>
                       
                     </div>
                     <img
@@ -1267,6 +1267,61 @@
                 </div>
                 <!-- Quantity / Payment Types-->
                 
+                <!-- Data Tables -->
+                <div class="col-12">
+                  <div class="card overflow-hidden">
+                    <div class="table-responsive">
+                      <table class="table table-sm">
+                        <thead>
+                          <tr>
+                            <th class="text-truncate">Customer</th>
+                            <th class="text-truncate">Phone</th>
+                            <th class="text-truncate">Job Title</th>
+                            <th class="text-truncate">City</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for customer in top_customers %}
+                          <tr>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="avatar">
+                                  <div class="avatar avatar-sm me-4">
+                                    {% with avatar_num=forloop.counter|stringformat:"s" %}
+                                      <img src="{% static 'img/avatars/'|add:avatar_num|add:'.png' %}" alt="Avatar" class="rounded-circle" />
+                                    {% endwith %}
+                                  </div>
+                                </div>
+                                <div>
+                                  <h6 class="mb-0 text-truncate">{{ customer.first_name }} {{ customer.last_name }}</h6>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="text-truncate">{{ customer.business_phone }}</td>
+                            <td class="text-truncate">
+                              <div class="d-flex align-items-center">
+                                <i class="icon-base ri ri-user-3-line text-success icon-22px me-2"></i>
+                                <span>{{ customer.job_title }}</span>
+                              </div>
+                            </td>
+                            <td class="text-truncate">
+                              <div class="d-flex align-items-center">
+                                {% cycle 'primary' 'success' 'warning' 'danger' 'info' 'secondary' as color_cycle silent %}
+                                <span class="avatar-initial bg-label-{{ color_cycle }} rounded-circle me-2"
+                                      style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                  {{ customer.city|slice:":2"|upper }}
+                                </span>
+                                <span>{{ customer.city }}</span>
+                              </div>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <!--/ Data Tables -->
 
                 <!-- Top Products -->
                 <div class="col-lg-8">
